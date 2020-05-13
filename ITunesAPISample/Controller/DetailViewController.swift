@@ -19,6 +19,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var playBtn: UIButton!
     @IBOutlet weak var pauseBtn: UIButton!
     @IBOutlet weak var restartBtn: UIButton!
+    @IBOutlet weak var artistName: UILabel!
     
     var musicDetails:Results?
     var audioPlayer = AVAudioPlayer()
@@ -30,6 +31,7 @@ class DetailViewController: UIViewController {
     override func loadView() {
         super.loadView()
         editDetailLayout()
+        
     }
     
     
@@ -41,6 +43,8 @@ class DetailViewController: UIViewController {
         super.viewWillAppear(animated)
         
         self.musicName.text = musicDetails?.trackName ?? "unknown"
+        self.artistName.text = musicDetails?.artistName ?? "unknown"
+        
         self.musicSlider.addTarget(self, action: #selector(_slider), for: .touchDragInside)
         
         
@@ -141,25 +145,34 @@ class DetailViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             artistImage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            artistImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
-            artistImage.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 1/2),
-            artistImage.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 1/2)
+            artistImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            artistImage.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.60),
+            artistImage.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 1)
         ])
         
         
         musicName.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(musicName)
         NSLayoutConstraint.activate([
-            musicName.topAnchor.constraint(equalTo: self.artistImage.bottomAnchor, constant: 5),
+            musicName.topAnchor.constraint(equalTo: self.artistImage.bottomAnchor),
             musicName.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             musicName.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 32),
             musicName.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -32)
         ])
         
+        artistName.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(artistName)
+        NSLayoutConstraint.activate([
+            artistName.topAnchor.constraint(equalTo: self.musicName.bottomAnchor, constant: 5),
+            artistName.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            artistName.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 32),
+            artistName.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -32)
+        ])
+        
         musicSlider.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(musicSlider)
         NSLayoutConstraint.activate([
-            musicSlider.topAnchor.constraint(equalTo: self.musicName.bottomAnchor, constant: 25),
+            musicSlider.topAnchor.constraint(equalTo: self.artistName.bottomAnchor, constant: 20),
             musicSlider.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             musicSlider.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 32),
             musicSlider.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -32),
@@ -168,7 +181,7 @@ class DetailViewController: UIViewController {
         currentTime.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(currentTime)
         NSLayoutConstraint.activate([
-            currentTime.topAnchor.constraint(equalTo: self.musicSlider.bottomAnchor, constant: 5),
+            currentTime.bottomAnchor.constraint(equalTo: self.musicSlider.topAnchor, constant: 10),
             currentTime.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 32),
             currentTime.widthAnchor.constraint(equalToConstant: 70)
         ])
@@ -176,7 +189,7 @@ class DetailViewController: UIViewController {
         totalDuration.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(totalDuration)
         NSLayoutConstraint.activate([
-            totalDuration.topAnchor.constraint(equalTo: self.musicSlider.bottomAnchor, constant: 5),
+            totalDuration.bottomAnchor.constraint(equalTo: self.musicSlider.topAnchor, constant: 10),
             totalDuration.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -32),
             totalDuration.widthAnchor.constraint(equalToConstant: 70)
         ])
@@ -186,7 +199,7 @@ class DetailViewController: UIViewController {
         self.view.addSubview(playBtn)
         NSLayoutConstraint.activate([
             playBtn.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 100),
-            playBtn.topAnchor.constraint(equalTo: self.currentTime.bottomAnchor, constant: 10),
+            playBtn.topAnchor.constraint(equalTo: self.musicSlider.bottomAnchor, constant: 10),
             playBtn.widthAnchor.constraint(equalToConstant: 30),
             playBtn.heightAnchor.constraint(equalToConstant: 30)
         ])
@@ -195,7 +208,7 @@ class DetailViewController: UIViewController {
         self.view.addSubview(pauseBtn)
         NSLayoutConstraint.activate([
             pauseBtn.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            pauseBtn.topAnchor.constraint(equalTo: self.currentTime.bottomAnchor, constant: 10),
+            pauseBtn.topAnchor.constraint(equalTo: self.musicSlider.bottomAnchor, constant: 10),
             pauseBtn.widthAnchor.constraint(equalToConstant: 30),
             pauseBtn.heightAnchor.constraint(equalToConstant: 30)
         ])
@@ -204,7 +217,7 @@ class DetailViewController: UIViewController {
         self.view.addSubview(restartBtn)
         NSLayoutConstraint.activate([
             restartBtn.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -100),
-            restartBtn.topAnchor.constraint(equalTo: self.currentTime.bottomAnchor, constant: 10),
+            restartBtn.topAnchor.constraint(equalTo: self.musicSlider.bottomAnchor, constant: 10),
             restartBtn.widthAnchor.constraint(equalToConstant: 30),
             restartBtn.heightAnchor.constraint(equalToConstant: 30)
         ])
